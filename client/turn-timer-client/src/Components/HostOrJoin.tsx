@@ -21,9 +21,11 @@ export function HostOrJoin() {
       if (response.status === 'ok') {
         setCurrentRoom!(value);
         setIsInRoom!(true);
+        return;
+      } else {
+        alert('room does not exist');
       }
     });
-    alert('room does not exist');
   }
 
   function leave() {
