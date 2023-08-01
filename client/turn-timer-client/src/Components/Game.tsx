@@ -8,7 +8,7 @@ export function Game() {
   const { myTurn, setMyTurn, playersInRoom, playerName, currentRoom } = useRoomContext();
 
   useEffect(() => {
-  }, [])
+  }, [playerName])
 
   const renderer = ({ hours, minutes, seconds, completed }: { hours: number, minutes: number, seconds: number, completed: boolean }) => {
     if (completed) {

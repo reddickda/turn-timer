@@ -9,7 +9,7 @@ export function ConnectionManager() {
 
   function connect() {
     setPlayerName!(value);
-    console.log(value)
+    console.log("connected", value)
     socket.auth = { value };
     socket.connect();
   }

@@ -23,6 +23,7 @@ function App() {
       //     console.log(playerName)
       //   // new or unrecoverable session
       // }
+      console.log("p name", playerName)
       setIsConnected!(true);
     }
 
@@ -76,7 +77,7 @@ function App() {
       socket.off('myTurn', onMyTurn);
       socket.off('endedGame', onEndedGame);
     };
-  }, []);
+  }, [playerName]);
 
   return (
     <Stack>
