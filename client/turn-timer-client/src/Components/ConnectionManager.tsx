@@ -4,11 +4,12 @@ import { useRoomContext } from '../Context/RoomContext';
 import { useState } from 'react';
 
 export function ConnectionManager() {
-  const { isConnected, setPlayerName, setIsHost, setCurrentRoom, setPlayersInRoom } = useRoomContext();
+  const { isConnected, playerName, currentRoom, setIsInRoom, setPlayerName, setIsHost, setCurrentRoom, setPlayersInRoom } = useRoomContext();
   const [value, setValue] = useState('');
 
   function connect() {
     setPlayerName!(value);
+    
     console.log("connected", value)
     socket.auth = { value };
     socket.connect();
@@ -17,11 +18,13 @@ export function ConnectionManager() {
   // TODO reload last state on disconnect
   function disconnect() {
     console.log('disconnect pressed')
+    setIsInRoom!(false);
     setPlayerName!('');
     setIsHost!(false);
     setCurrentRoom!('');
     setPlayersInRoom!([]);
     setIsHost!(false);
+    socket.emit('leave', { name: playerName, roomNum: currentRoom ?? socket.disconnect })
     socket.disconnect();
   }
 

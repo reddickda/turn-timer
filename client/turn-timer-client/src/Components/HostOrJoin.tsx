@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { Room } from './Room';
 
 export function HostOrJoin() {
-  const { isConnected, isInRoom, playerName, setIsInRoom, setIsHost, setCurrentRoom, setPlayersInRoom } = useRoomContext();
+  const { isConnected, currentRoom, isInRoom, playerName, isHost, setIsInRoom, setIsHost, setCurrentRoom, setPlayersInRoom } = useRoomContext();
   const [value, setValue] = useState('');
   // host is a join with no room number
   function host() {
@@ -29,10 +29,14 @@ export function HostOrJoin() {
   }
 
   function leave() {
-    socket.emit('leave', { name: playerName, roomNum: value });
+    if (isHost) {
+      socket.emit('hostLeave', { name: playerName, roomNum: currentRoom });
+    } else {
+      console.log('leaving...')
+      socket.emit('leave', { name: playerName, roomNum: currentRoom });
+    }
     setIsHost!(false);
     setIsInRoom!(false);
-    setCurrentRoom!('');
     setPlayersInRoom!([]);
   }
 

@@ -21,7 +21,9 @@ io.on('connection', (socket) => {
     console.log("not recovered")
     // new or unrecoverable session
   }
+
   console.log('a user connected', socket.id);
+
   socket.on('host', async () => {
     socket.join(socket.id);
     const sockets = await io.in(socket.id).fetchSockets();
@@ -73,9 +75,8 @@ io.on('connection', (socket) => {
 
     const roomNumber = roomNum ?? socket.id;
 
-    socket.leave(roomNumber)
 
-    socket.to(roomNumber).emit('leftGame', { room: roomNumber, id: socket.id, name: socket.handshake.auth.value })
+    io.to(roomNumber).emit('leftGame', { name: socket.handshake.auth.value })
 
     const sockets = await io.in(roomNumber).fetchSockets();
 
@@ -85,11 +86,27 @@ io.on('connection', (socket) => {
 
     console.log("remaining", usernames)
 
-
     io.to(roomNumber)
       .emit('connectedUsers', {
         users: usernames
       })
+
+    socket.leave(roomNumber)
+  })
+
+  socket.on('hostLeave', async ({ name, roomNum }, callback) => {
+    console.log(`host ${socket.id} left room ${roomNum}`)
+
+    const roomNumber = roomNum ?? socket.id;
+
+    io.to(roomNumber).emit('hostLeftRoom', { room: roomNumber })
+
+    io.to(roomNumber)
+      .emit('connectedUsers', {
+        users: []
+      })
+
+    socket.leave(roomNumber)
   })
 
   socket.on('startGame', async ({ name, roomNum, players }, callback) => {
@@ -104,34 +121,23 @@ io.on('connection', (socket) => {
       return socket.handshake.auth.value;
     })
 
-    console.log("players... ",players)
+    console.log("players... ", players)
 
     io.to(roomNumber).emit('startedGame', { room: roomNumber, players: players })
 
-    io.to(roomNumber).emit('myTurn', { name: players[0], roomNum: roomNumber})
-    // io.sockets.in(roomNumber).emit('startedGame', { room: roomNumber });
-    // socket.broadcast.to(roomNumber).emit('startedGame', { room: roomNumber }); // This will emit the event to all connected sockets
+    io.to(roomNumber).emit('myTurn', { name: players[0], roomNum: roomNumber })
   })
 
   socket.on('endGame', ({ name, roomNum }, callback) => {
     console.log('host ended game');
-    io.to(roomNum).emit('endedGame', { room: roomNum }); // This will emit the event to all connected sockets
+    io.to(roomNum).emit('endedGame', { room: roomNum });
   });
 
-  socket.on('endedTurn', ({ name, roomNum }, callback) => {
-    console.log('user ended turn');
-    io.emit('endedTurn', { user: socket.id }); // This will emit the event to all connected sockets
-  });
-
-  socket.on('nextTurn', ({name, roomNum}) => {
+  socket.on('nextTurn', ({ name, roomNum }) => {
     console.log(`${name}'s turn!`);
 
     io.to(roomNum).emit('myTurn', { name: name })
   })
-
-  socket.on('timerUp', ({ name, roomNum }, callback) => {
-
-  });
 
   socket.on('configure', ({ name, roomNum }, callback) => {
 

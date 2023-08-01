@@ -8,7 +8,7 @@ import { useRoomContext } from './Context/RoomContext';
 import { Game } from './Components/Game';
 
 function App() {
-  const { isConnected, setIsConnected, playerName, setPlayersInRoom, gameStarted, setGameStarted, setMyTurn } = useRoomContext();
+  const { setCurrentRoom, isConnected, setIsConnected, playerName, setPlayersInRoom, gameStarted, setGameStarted, setIsInRoom, setMyTurn } = useRoomContext();
 
   useEffect(() => {
     function onConnect() {
@@ -32,12 +32,13 @@ function App() {
     }
 
     function onConnectedUsers(value: { users: string[] }) {
-      console.log("users", value);
+      console.log("connected users", value);
       setPlayersInRoom!(value.users);
     }
 
-    function onLeftGame() {
+    function onLeftGame(value: { name: string }) {
       console.log("user left game");
+      console.log("remaining", value.name)
       // set
     }
 
@@ -47,10 +48,10 @@ function App() {
       setGameStarted!(true);
     }
 
-    function onMyTurn(value: { name: string}) {
+    function onMyTurn(value: { name: string }) {
       console.log("my turn!", value.name)
       console.log('my name', playerName)
-      if(value.name === playerName)
+      if (value.name === playerName)
         setMyTurn!(true);
     }
 
@@ -60,6 +61,16 @@ function App() {
       setGameStarted!(false);
     }
 
+    function onHostLeftRoom(value: {room: string}) {
+      console.log("host left...leaving...")
+      socket.emit('leave', { name: playerName, roomNum: value.room });
+      setMyTurn!(false);
+      setGameStarted!(false);
+      setCurrentRoom!('')
+      setPlayersInRoom!([])
+      setIsInRoom!(false);
+    }
+
     socket.on('connect', onConnect);
     socket.on('disconnect', onDisconnect);
     socket.on('connectedUsers', onConnectedUsers);
@@ -67,6 +78,7 @@ function App() {
     socket.on('startedGame', onStartedGame);
     socket.on('myTurn', onMyTurn);
     socket.on('endedGame', onEndedGame);
+    socket.on('hostLeftRoom', onHostLeftRoom);
 
     return () => {
       socket.off('connect', onConnect);
@@ -76,6 +88,8 @@ function App() {
       socket.off('startedGame', onStartedGame);
       socket.off('myTurn', onMyTurn);
       socket.off('endedGame', onEndedGame);
+      socket.off('hostLeftRoom', onHostLeftRoom);
+
     };
   }, [playerName]);
 

@@ -5,7 +5,7 @@ import Countdown from 'react-countdown';
 import { socket } from "../../socket";
 
 export function Game() {
-  const { myTurn, setMyTurn, playersInRoom, playerName, currentRoom } = useRoomContext();
+  const { myTurn, setMyTurn, playersInRoom, playerName, currentRoom, isHost } = useRoomContext();
 
   useEffect(() => {
   }, [playerName])
@@ -40,6 +40,6 @@ export function Game() {
   return <><Paper style={{ backgroundColor: myTurn ? 'green' : 'red', height: 200, width: 300 }}>Game!
     {myTurn && <Countdown date={Date.now() + 10000} renderer={renderer} />}
   </Paper>
-    <Button onClick={endGame}>End Game</Button>
+    {isHost && <Button onClick={endGame}>End Game</Button>}
   </>
 }
