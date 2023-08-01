@@ -7,6 +7,10 @@ interface IRoomContext {
   isConnected: boolean,
   isInRoom: boolean,
   isHost: boolean,
+  gameStarted: boolean,
+  myTurn: boolean,
+  setMyTurn?: Dispatch<SetStateAction<boolean>>, 
+  setGameStarted?: Dispatch<SetStateAction<boolean>>,
   setIsInRoom?: Dispatch<SetStateAction<boolean>>,
   setIsConnected?: Dispatch<SetStateAction<boolean>>,
   setPlayerName?: Dispatch<SetStateAction<string>>,
@@ -22,6 +26,10 @@ const RoomContext = createContext<IRoomContext>({
   isConnected: false,
   isInRoom: false,
   isHost: false,
+  gameStarted: false,
+  myTurn: false,
+  setMyTurn: undefined,
+  setGameStarted: undefined,
   setIsInRoom: undefined,
   setIsConnected: undefined,
   setPlayerName: undefined,
@@ -41,7 +49,8 @@ export const ContextProvider = ({ children }: IContextProvider) => {
   const [isHost, setIsHost] = useState<boolean>(false);
   const [currentRoom, setCurrentRoom] = useState<string>('');
   const [playersInRoom, setPlayersInRoom] = useState<string[]>([]);
-
+  const [gameStarted, setGameStarted] = useState<boolean>(false);
+  const [myTurn, setMyTurn] = useState<boolean>(false);
 
   if (!RoomContext) {
     throw new Error(
@@ -62,7 +71,11 @@ export const ContextProvider = ({ children }: IContextProvider) => {
       playersInRoom,
       setPlayersInRoom,
       isHost,
-      setIsHost
+      setIsHost,
+      gameStarted,
+      setGameStarted,
+      myTurn,
+      setMyTurn,
     }}>
       {children}
     </RoomContext.Provider>

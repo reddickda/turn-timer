@@ -38,11 +38,14 @@ export function DraggableList({ data }: DndListProps) {
   const [state, handlers] = useListState(data);
 
   function confirm() {
+    console.log("confirm", state)
+
     setPlayersInRoom!(state);
   }
 
   useEffect(() => {
     handlers.setState(playersInRoom)
+    console.log("useeffect", playersInRoom)
   }, [playersInRoom])
   const items = state.map((item, index) => (
     <Draggable key={item} index={index} draggableId={item}>

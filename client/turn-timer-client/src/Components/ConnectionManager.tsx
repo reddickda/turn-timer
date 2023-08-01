@@ -9,12 +9,14 @@ export function ConnectionManager() {
 
   function connect() {
     setPlayerName!(value);
+    console.log(value)
     socket.auth = { value };
     socket.connect();
   }
 
   // TODO reload last state on disconnect
   function disconnect() {
+    console.log('disconnect pressed')
     setPlayerName!('');
     setIsHost!(false);
     setCurrentRoom!('');
