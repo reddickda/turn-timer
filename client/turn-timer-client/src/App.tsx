@@ -8,7 +8,7 @@ import { useRoomContext } from './Context/RoomContext';
 import { Game } from './Components/Game';
 
 function App() {
-  const { setCurrentRoom, isConnected, setIsConnected, playerName, setPlayersInRoom, gameStarted, setGameStarted, setIsInRoom, setMyTurn } = useRoomContext();
+  const { setCurrentRoom, isConnected, setIsConnected, playerName, setPlayersInRoom, gameStarted, setGameStarted, setIsInRoom, setMyTurn, setGlobalTurnLength } = useRoomContext();
 
   useEffect(() => {
     function onConnect() {
@@ -42,10 +42,11 @@ function App() {
       // set
     }
 
-    function onStartedGame(value: { players: string[] }) {
+    function onStartedGame(value: { players: string[], turnLength: number }) {
       console.log("started game!", value);
       setPlayersInRoom!(value.players);
       setGameStarted!(true);
+      setGlobalTurnLength!(value.turnLength);
     }
 
     function onMyTurn(value: { name: string }) {

@@ -9,6 +9,8 @@ interface IRoomContext {
   isHost: boolean,
   gameStarted: boolean,
   myTurn: boolean,
+  globalTurnLength: number,
+  setGlobalTurnLength?: Dispatch<SetStateAction<number>>, 
   setMyTurn?: Dispatch<SetStateAction<boolean>>, 
   setGameStarted?: Dispatch<SetStateAction<boolean>>,
   setIsInRoom?: Dispatch<SetStateAction<boolean>>,
@@ -28,6 +30,8 @@ const RoomContext = createContext<IRoomContext>({
   isHost: false,
   gameStarted: false,
   myTurn: false,
+  globalTurnLength: 10,
+  setGlobalTurnLength: undefined,
   setMyTurn: undefined,
   setGameStarted: undefined,
   setIsInRoom: undefined,
@@ -51,6 +55,7 @@ export const ContextProvider = ({ children }: IContextProvider) => {
   const [playersInRoom, setPlayersInRoom] = useState<string[]>([]);
   const [gameStarted, setGameStarted] = useState<boolean>(false);
   const [myTurn, setMyTurn] = useState<boolean>(false);
+  const [globalTurnLength, setGlobalTurnLength] = useState<number>(10)
 
   if (!RoomContext) {
     throw new Error(
@@ -76,6 +81,8 @@ export const ContextProvider = ({ children }: IContextProvider) => {
       setGameStarted,
       myTurn,
       setMyTurn,
+      globalTurnLength,
+      setGlobalTurnLength
     }}>
       {children}
     </RoomContext.Provider>

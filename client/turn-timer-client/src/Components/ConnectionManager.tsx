@@ -21,11 +21,11 @@ export function ConnectionManager() {
     setIsInRoom!(false);
     setPlayerName!('');
     setIsHost!(false);
-    setCurrentRoom!('');
     setPlayersInRoom!([]);
     setIsHost!(false);
     socket.emit('leave', { name: playerName, roomNum: currentRoom ?? socket.disconnect })
     socket.disconnect();
+    setCurrentRoom!('');
   }
 
   return (

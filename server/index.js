@@ -77,6 +77,7 @@ io.on('connection', (socket) => {
 
 
     io.to(roomNumber).emit('leftGame', { name: socket.handshake.auth.value })
+    socket.leave(roomNumber)
 
     const sockets = await io.in(roomNumber).fetchSockets();
 
@@ -90,8 +91,6 @@ io.on('connection', (socket) => {
       .emit('connectedUsers', {
         users: usernames
       })
-
-    socket.leave(roomNumber)
   })
 
   socket.on('hostLeave', async ({ name, roomNum }, callback) => {
@@ -109,7 +108,7 @@ io.on('connection', (socket) => {
     socket.leave(roomNumber)
   })
 
-  socket.on('startGame', async ({ name, roomNum, players }, callback) => {
+  socket.on('startGame', async ({ name, roomNum, players, turnLength }, callback) => {
     console.log('host started game');
     const roomNumber = roomNum ?? socket.id;
 
@@ -123,7 +122,7 @@ io.on('connection', (socket) => {
 
     console.log("players... ", players)
 
-    io.to(roomNumber).emit('startedGame', { room: roomNumber, players: players })
+    io.to(roomNumber).emit('startedGame', { room: roomNumber, players: players, turnLength })
 
     io.to(roomNumber).emit('myTurn', { name: players[0], roomNum: roomNumber })
   })
