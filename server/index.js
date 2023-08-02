@@ -5,7 +5,7 @@ const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server, {
   cors: {
-    origin: ["http://localhost:3000", "http://localhost:5173", "http://127.0.0.1/3000", "http://3.83.94.212/3000", "http://3.83.94.212"]
+    origin: ["http://3.83.94.212/3000", "http://3.83.94.212"] //http://192.168.0.25:5173/
   }
 });
 
