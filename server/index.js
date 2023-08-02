@@ -3,12 +3,10 @@ const app = express();
 const http = require('http');
 const server = http.createServer(app);
 const { Server } = require("socket.io");
-const io = new Server(server, {
-  cors: {
-    origin: ["http://localhost:3000", "http://localhost:5173", "http://127.0.0.1/3000", "http://3.83.94.212/3000", "http://3.83.94.212"]
-  }
-});
-
+const io = new Server(server);
+// cors: {
+  //   origin: ["http://localhost:3000", "http://localhost:5173", "http://127.0.0.1/3000", "http://3.83.94.212/3000", "http://3.83.94.212"]
+  // }
 // user connects
 // user attempts to join
 // if no id is passed, its a hosted room with users id
