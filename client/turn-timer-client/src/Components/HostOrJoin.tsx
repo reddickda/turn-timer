@@ -12,7 +12,7 @@ export function HostOrJoin() {
     socket.emit('host');
     setIsHost!(true);
     setIsInRoom!(true);
-    setCurrentRoom!(socket.id);
+    setCurrentRoom!(socket.id.substring(0,5));
   }
 
   // join is a join with room number

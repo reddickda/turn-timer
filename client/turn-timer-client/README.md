@@ -1,1 +1,0 @@
-// dont let people join mid game

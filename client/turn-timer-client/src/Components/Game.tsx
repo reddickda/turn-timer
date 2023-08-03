@@ -12,8 +12,9 @@ export function Game() {
   const clockRef = useRef<Countdown>(null);
 
   useEffect(() => {
-    if(myTurn)
+    if(myTurn){
       play()
+    }
   }, [playerName, myTurn])
 
   const renderer = ({ hours, minutes, seconds, completed }: { hours: number, minutes: number, seconds: number, completed: boolean }) => {

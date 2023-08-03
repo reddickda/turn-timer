@@ -14,7 +14,7 @@ export function Room() {
     // set current players in game as order
     // confirm order
     console.log("start", playersInRoom)
-    socket.emit('startGame', { roomNum: socket.id, players: playersInRoom, turnLength: turnLength });
+    socket.emit('startGame', { roomNum: currentRoom, players: playersInRoom, turnLength: turnLength });
     // emit event to set current players context order for everyone else
     // emit game start event
     // game start event to each player in room in order

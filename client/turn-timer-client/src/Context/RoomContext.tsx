@@ -82,7 +82,7 @@ export const ContextProvider = ({ children }: IContextProvider) => {
       myTurn,
       setMyTurn,
       globalTurnLength,
-      setGlobalTurnLength
+      setGlobalTurnLength,
     }}>
       {children}
     </RoomContext.Provider>

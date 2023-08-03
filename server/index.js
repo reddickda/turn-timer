@@ -25,14 +25,15 @@ io.on('connection', (socket) => {
   console.log('a user connected', socket.id);
 
   socket.on('host', async () => {
-    socket.join(socket.id);
-    const sockets = await io.in(socket.id).fetchSockets();
+    const joinCode = socket.id.substring(0,5);
+    socket.join(joinCode);
+    const sockets = await io.in(joinCode).fetchSockets();
 
     const usernames = sockets.map((socket) => {
       return socket.handshake.auth.value;
     })
 
-    io.to(socket.id)
+    io.to(joinCode)
       .emit('connectedUsers', {
         users: usernames
       })
@@ -73,7 +74,8 @@ io.on('connection', (socket) => {
   socket.on('leave', async ({ name, roomNum }, callback) => {
     console.log(`player ${socket.id} left room ${roomNum}`)
 
-    const roomNumber = roomNum ?? socket.id;
+    const roomNumber = roomNum ?? socket.id.substring(0,5);
+    ;
 
 
     io.to(roomNumber).emit('leftGame', { name: socket.handshake.auth.value })
@@ -96,7 +98,7 @@ io.on('connection', (socket) => {
   socket.on('hostLeave', async ({ name, roomNum }, callback) => {
     console.log(`host ${socket.id} left room ${roomNum}`)
 
-    const roomNumber = roomNum ?? socket.id;
+    const roomNumber = roomNum ?? socket.id.substring(0,5);
 
     io.to(roomNumber).emit('hostLeftRoom', { room: roomNumber })
 
@@ -110,7 +112,7 @@ io.on('connection', (socket) => {
 
   socket.on('startGame', async ({ name, roomNum, players, turnLength }, callback) => {
     console.log('host started game');
-    const roomNumber = roomNum ?? socket.id;
+    const roomNumber = roomNum ?? socket.id.substring(0,5);
 
     console.log('roomnum', roomNumber)
 
