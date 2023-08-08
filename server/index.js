@@ -9,6 +9,10 @@ const io = new Server(server, {
   }
 });
 
+app.get("/.well-known/pki-validation/", (req, res) => {
+	res.sendFile('DA1C5493B50B30579A9EC593EAEC3B8D.txt');
+})
+
 // user connects
 // user attempts to join
 // if no id is passed, its a hosted room with users id
