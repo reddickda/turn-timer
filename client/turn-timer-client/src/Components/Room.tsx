@@ -1,8 +1,8 @@
 import { Button, NumberInput, Text } from "@mantine/core";
 import { useRoomContext } from "../Context/RoomContext"
-import { DraggableList } from "./DraggableList";
 import { socket } from "../../socket";
 import { useState } from "react";
+import { OrderableList } from "./OrderableList";
 
 export function Room() {
   const { isHost, currentRoom, playersInRoom } = useRoomContext();
@@ -25,14 +25,12 @@ export function Room() {
   return (
     <>
       <Text>In room: {currentRoom}</Text>
-      {isHost ? <div>you are host</div> : <div>you are player</div>}
-      <Text>Players in room:</Text>
-      {playersInRoom.map((player: string) => {
+      {!isHost && playersInRoom.map((player: string) => {
         return <Text key={player}>{player}</Text>
       })}
       {isHost &&
         <>
-          <DraggableList data={playersInRoom} />
+          <OrderableList data={playersInRoom} />
           <NumberInput value={turnLength} onChange={setTurnLength} />
           <Button onClick={start}>Start Game</Button>
         </>}

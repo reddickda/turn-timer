@@ -26,8 +26,9 @@ a:hover {
 body {
   margin: 0;
   display: flex;
-  place-items: center;
+  /* place-items: center; */
   min-width: 320px;
+  touch-action: pan-y;
   min-height: 100vh;
 }
 

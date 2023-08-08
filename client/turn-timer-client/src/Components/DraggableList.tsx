@@ -12,7 +12,7 @@ const useStyles = createStyles((theme) => ({
     borderRadius: theme.radius.md,
     border: `${rem(1)} solid ${theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.gray[2]
       }`,
-    padding: `${theme.spacing.sm} ${theme.spacing.xl}`,
+    padding: `5px`,
     backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.gray[6],
     marginBottom: theme.spacing.sm,
   },
@@ -46,7 +46,7 @@ export function DraggableList({ data }: DndListProps) {
   }, [playersInRoom])
 
   const items = state.map((item, index) => (
-    <Draggable key={item} index={index} draggableId={item}>
+    <Draggable key={item} index={index} draggableId={item} > 
       {(provided, snapshot) => (
         <div
           className={cx(classes.item, { [classes.itemDragging]: snapshot.isDragging })}
@@ -66,8 +66,11 @@ export function DraggableList({ data }: DndListProps) {
         onDragEnd={({ destination, source }) =>
           handlers.reorder({ from: source.index, to: destination?.index || 0 })
         }
+        onDragStart={(start, provided) => {
+          console.log(start, provided)
+        }}
       >
-        <Droppable droppableId="dnd-list" direction="vertical">
+        <Droppable type='player' droppableId="dnd-list" direction="vertical">
           {(provided) => (
             <div {...provided.droppableProps} ref={provided.innerRef}>
               {items}

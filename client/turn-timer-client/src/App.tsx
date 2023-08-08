@@ -95,10 +95,9 @@ function App() {
   }, [playerName]);
 
   return (
-    <Stack>
+    <Stack spacing={'xs'}>
       <Text size={'3em'}>Turn Timer</Text>
       <Text>Keep track of who's turn it is!</Text>
-
       {isConnected &&
         <>
           <Text>{playerName}</Text>
