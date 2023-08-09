@@ -1,0 +1,1 @@
+- reconnect to room on refresh needed

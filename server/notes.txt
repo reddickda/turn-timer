@@ -1,8 +1,7 @@
 todo: dont let people join mid game
 
-
 // Sever notes:
-// EC2 instance with node and pm2 installed
+// EC2 instance with node and pm2 installed - elastic ip assigned to ec2 for stability of ip
   // connect to EC2 with ssh `ssh -i aws-test-key-turntimer.pem ubuntu@3.83.94.212`
     - pem is on local desktop
   // git pull to get server changes and stop/start node instance with pm2
@@ -24,3 +23,43 @@ todo: dont let people join mid game
         }`
 // will need to add ssh/https
 // will need to add automated deploy too
+
+
+server {
+        server_name 54.175.61.41;
+        listen 443 ssl;
+        listen [::]:443 ssl;
+        ssl_certificate /etc/nginx/ssl/server.crt;
+        ssl_certificate_key /etc/nginx/ssl/server.key;
+
+        location / {
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                proxy_set_header Host $host;
+                proxy_pass http://localhost:3000;
+                proxy_http_version 1.1;
+                proxy_set_header Upgrade $http_upgrade;
+
+proxy_set_header Connection "upgrade";
+
+}
+}
+
+
+used zero ssl and some hacky verification by returning txt content from a express route
+        - didnt need to upload anything to ec2 instance or change nginx static hosting
+        - generated csr with openssl
+        - used that in zerossl
+        - 
+scp -i aws-test-key-turntimer.pem ../../Downloads/54.175.61.41/certificate.crt ubuntu@54.175.61.41:/etc/ssl
+
+ssh -i aws-test-key-turntimer.pem ubuntu@54.175.61.41
+
+sudo service nginx restart
+
+sudo systemctl stop nginx
+
+do everything again using zero ssl but generate new csr
+can copy with 
+ - sudo mv 54_175_61_41.key /etc/nginx/ssl/ once scp into server
+
+- get env variables up and remove the extra stuff from server index in the urls
