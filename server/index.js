@@ -9,8 +9,8 @@ const io = new Server(server, {
   }
 });
 
-app.get("/.well-known/pki-validation/DA1C5493B50B30579A9EC593EAEC3B8D.txt", (req, res) => {
-	res.send('A14F4FD3741B8287B3D123C19316499CACA34AE6B254E0DA6253A996D41DD393\ncomodoca.com\nb6615a67c87a098');
+app.get("/.well-known/pki-validation/965F41EDD8C244B9347865556C207ACD.txt", (req, res) => {
+	res.send('BDC03A52F78A01F5DD5F0B40963E3C295E95EDD8903ECBD3B28A85BED5589A2C\ncomodoca.com\nc771524edbb7b14');
 })
 
 // user connects
