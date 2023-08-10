@@ -12,18 +12,26 @@ export function HostOrJoin() {
     socket.emit('host');
     setIsHost!(true);
     setIsInRoom!(true);
-    setCurrentRoom!(socket.id.substring(0,5));
+    setCurrentRoom!(socket.id.substring(0, 5));
+    localStorage.setItem('roomCode', socket.id.substring(0, 5))
   }
 
   // join is a join with room number
   function join() {
+    setCurrentRoom!(value);
+    console.log('roomcode', value)
     socket.emit('join', { name: playerName, roomNum: value }, (response: { status: string }) => {
       if (response.status === 'ok') {
         setCurrentRoom!(value);
+    console.log('roomcoderesponse', value)
+    localStorage.setItem('roomCode', value)
+
         setIsInRoom!(true);
         return;
       } else {
         alert('room does not exist');
+        setCurrentRoom!('');
+
       }
     });
   }
@@ -38,6 +46,8 @@ export function HostOrJoin() {
     setIsHost!(false);
     setIsInRoom!(false);
     setPlayersInRoom!([]);
+    localStorage.setItem('roomCode', '')
+
   }
 
   if (!isConnected) {

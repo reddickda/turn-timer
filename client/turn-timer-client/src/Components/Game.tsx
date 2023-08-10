@@ -15,6 +15,7 @@ export function Game() {
     if(myTurn){
       play()
     }
+    console.log(myTurn)
   }, [playerName, myTurn])
 
   const renderer = ({ hours, minutes, seconds, completed }: { hours: number, minutes: number, seconds: number, completed: boolean }) => {

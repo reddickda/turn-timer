@@ -8,26 +8,29 @@ import { useRoomContext } from './Context/RoomContext';
 import { Game } from './Components/Game';
 
 function App() {
-  const { setCurrentRoom, isConnected, setIsConnected, playerName, setPlayersInRoom, gameStarted, setGameStarted, setIsInRoom, setMyTurn, setGlobalTurnLength } = useRoomContext();
+  const { setCurrentRoom, isConnected, setIsConnected, playerName, setPlayersInRoom, gameStarted, setGameStarted, setIsInRoom, setMyTurn, setGlobalTurnLength, setIsHost,  playersInRoom } = useRoomContext();
+
+  useEffect(() => {
+    console.log("players", playersInRoom)
+    if(!socket.connected) {
+      setIsConnected!(false);
+      setPlayersInRoom!([]);
+      setMyTurn!(false);
+      setGameStarted!(false);
+      setCurrentRoom!('')
+      setIsInRoom!(false);
+      setIsHost!(false);
+    }
+  },[playersInRoom, socket.connected])
 
   useEffect(() => {
     function onConnect() {
-      // if (socket.recovered) {
-      //   // any missed packets will be received
-      //   console.log("recovered")
-      // } else {
-      //   console.log("not recovered")
-      //   setGameStarted!(false);
-      //   setMyTurn!(false);
-      //   // setPlayerName!(socket.auth);
-      //     console.log(playerName)
-      //   // new or unrecoverable session
-      // }
-      console.log("p name", playerName)
+
       setIsConnected!(true);
     }
 
     function onDisconnect() {
+      console.log("disconnected!")
       setIsConnected!(false);
     }
 
@@ -62,7 +65,7 @@ function App() {
       setGameStarted!(false);
     }
 
-    function onHostLeftRoom(value: {room: string}) {
+    function onHostLeftRoom(value: { room: string }) {
       console.log("host left...leaving...")
       socket.emit('leave', { name: playerName, roomNum: value.room });
       setMyTurn!(false);
@@ -92,7 +95,7 @@ function App() {
       socket.off('hostLeftRoom', onHostLeftRoom);
 
     };
-  }, [playerName]);
+  }, [playerName, isConnected]);
 
   return (
     <Stack spacing={'xs'}>

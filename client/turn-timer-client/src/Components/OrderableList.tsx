@@ -3,6 +3,7 @@ import { useRoomContext } from '../Context/RoomContext';
 import { Button, Stack } from '@mantine/core';
 import { useEffect } from 'react';
 import { IconArrowUp, IconArrowDown } from '@tabler/icons-react'
+import { socket } from '../../socket';
 
 interface OrderableListProps {
   data: string[];
@@ -27,6 +28,10 @@ export function OrderableList({ data }: OrderableListProps) {
   }
 
   function confirm() {
+    socket.emit('confirmOrder', {
+      players: state,
+      roomNum: localStorage.getItem('roomCode')
+    })
     setPlayersInRoom!(state);
   }
 
