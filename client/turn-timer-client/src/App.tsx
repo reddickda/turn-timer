@@ -8,20 +8,7 @@ import { useRoomContext } from './Context/RoomContext';
 import { Game } from './Components/Game';
 
 function App() {
-  const { setCurrentRoom, isConnected, setIsConnected, playerName, setPlayersInRoom, gameStarted, setGameStarted, setIsInRoom, setMyTurn, setGlobalTurnLength, setIsHost,  playersInRoom } = useRoomContext();
-
-  useEffect(() => {
-    console.log("players", playersInRoom)
-    if(!socket.connected) {
-      setIsConnected!(false);
-      setPlayersInRoom!([]);
-      setMyTurn!(false);
-      setGameStarted!(false);
-      setCurrentRoom!('')
-      setIsInRoom!(false);
-      setIsHost!(false);
-    }
-  },[playersInRoom, socket.connected])
+  const { setCurrentRoom, isConnected, setIsConnected, playerName, setPlayersInRoom, gameStarted, setGameStarted, setIsInRoom, setMyTurn, setGlobalTurnLength, setIsHost } = useRoomContext();
 
   useEffect(() => {
     function onConnect() {
@@ -31,6 +18,12 @@ function App() {
 
     function onDisconnect() {
       console.log("disconnected!")
+      setPlayersInRoom!([]);
+      setMyTurn!(false);
+      setGameStarted!(false);
+      setCurrentRoom!('')
+      setIsInRoom!(false);
+      setIsHost!(false);
       setIsConnected!(false);
     }
 
