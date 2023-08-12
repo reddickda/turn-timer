@@ -1,9 +1,8 @@
 import { Stack, createStyles } from '@mantine/core'
+import { SocketListener } from '../Context/SocketListener.tsx';
 import '../App.css'
-
-type Props = {
-  children: string | JSX.Element | JSX.Element[]
-}
+import { Outlet, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 const useStyles = createStyles(() => ({
   header: {
@@ -11,10 +10,16 @@ const useStyles = createStyles(() => ({
   }
 }))
 
-export function PageWrapper({ children }: Props) {
+export function PageWrapper() {
   const { classes } = useStyles();
+  const navigate = useNavigate()
+
+  useEffect(() =>{
+    navigate('/connect')
+  },[])
 
   return <Stack spacing={'xs'} className={classes.header}>
-    {children}
+    <Outlet />
+    <SocketListener />
   </ Stack>
 }

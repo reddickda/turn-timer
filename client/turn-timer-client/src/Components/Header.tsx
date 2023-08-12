@@ -3,10 +3,11 @@ import { useEffect } from 'react'
 import { useRoomContext } from '../Context/RoomContext';
 
 export function Header() {
-  const  { isConnected } = useRoomContext();
+  const  { isConnected, isHost } = useRoomContext();
   
   useEffect(() => {
     console.log(isConnected)
+    console.log('why we here', isHost)
   }, [isConnected])
   return (
     <>

@@ -1,57 +1,60 @@
 import { socket } from '../../socket';
-import { Button, TextInput } from '@mantine/core';
+import { TextInput } from '@mantine/core';
 import { useRoomContext } from '../Context/RoomContext';
 import { useState } from 'react';
-import { PageWrapper } from '../Components/PageWrapper';
+import { Link } from 'react-router-dom';
 
 export function JoinOrHost() {
   const { isConnected, playerName, setIsInRoom, setIsHost, setCurrentRoom } = useRoomContext();
   const [value, setValue] = useState('');
+
   // host is a join with no room number
   function host() {
     socket.emit('host');
+    console.log('hosting')
     setIsHost!(true);
     setIsInRoom!(true);
     setCurrentRoom!(socket.id.substring(0, 5));
     localStorage.setItem('roomCode', socket.id.substring(0, 5))
+    localStorage.setItem('isHost', 'true');
   }
 
   // join is a join with room number
   function join() {
-    setCurrentRoom!(value);
-    console.log('roomcode', value)
-    socket.emit('join', { name: playerName, roomNum: value }, (response: { status: string }) => {
-      if (response.status === 'ok') {
-        setCurrentRoom!(value);
-        console.log('roomcoderesponse', value)
-        localStorage.setItem('roomCode', value)
-
-        setIsInRoom!(true);
-        return;
-      } else {
-        alert('room does not exist');
-        setCurrentRoom!('');
-
-      }
-    });
+    if(value !== ''){
+      setCurrentRoom!(value);
+      socket.emit('join', { name: playerName, roomNum: value }, (response: { status: string }) => {
+        if (response.status === 'ok') {
+          setCurrentRoom!(value);
+          console.log('roomcoderesponse', value)
+          localStorage.setItem('roomCode', value)
+          localStorage.setItem('isHost', 'false');
+          setIsInRoom!(true);
+          return;
+        } else {
+          alert('room does not exist');
+          setCurrentRoom!('');
+  
+        }
+      });
+    }else{
+      alert('enter room code')
+    }
   }
 
   if (!isConnected) {
-    console.log(isConnected)
     return;
   }
   return (
-
-    <PageWrapper>
+    <>
       <TextInput
         placeholder="Room Code"
         withAsterisk
         value={value}
         onChange={(event) => setValue(event.currentTarget.value)}
       />
-      <Button onClick={host}>Host</Button>
-      <Button disabled={value == '' || value === undefined} onClick={join}>Join</Button>
-
-    </ PageWrapper>
+      <Link onClick={host} to={'/host'}>Host</Link>
+      <Link onClick={join} to={value !== '' ? '/join' : '/joinorhost'}>Join</Link>
+    </>
   )
 }

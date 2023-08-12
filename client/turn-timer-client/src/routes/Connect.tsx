@@ -2,7 +2,6 @@ import { socket } from '../../socket';
 import { TextInput } from '@mantine/core';
 import { useRoomContext } from '../Context/RoomContext';
 import { useState } from 'react';
-import { PageWrapper } from '../Components/PageWrapper';
 import { Link } from 'react-router-dom';
 
 export function Connect() {
@@ -23,14 +22,14 @@ export function Connect() {
   }
 
   return (
-    <PageWrapper>
+    <>
       <TextInput
         placeholder="Your name"
         withAsterisk
         value={value}
         onChange={(event) => setValue(event.currentTarget.value)}
       />
-      <Link onClick={connect} to={value !== '' ? 'joinorhost' : '/'}>Connect</Link>
-    </ PageWrapper>
+      <Link onClick={connect} to={value !== '' ? '/joinorhost' : '/'}>Connect</Link>
+    </ >
   );
 }
