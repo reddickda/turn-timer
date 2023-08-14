@@ -1,9 +1,10 @@
-import { Stack, createStyles } from '@mantine/core'
+import { Stack, createStyles, Text } from '@mantine/core'
 import { SocketListener } from '../Context/SocketListener.tsx';
 import '../App.css'
 import { Outlet, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useRoomContext } from '../Context/RoomContext.tsx';
+import { HowToUseModal } from './HowToUseModal.tsx';
 
 const useStyles = createStyles(() => ({
   header: {
@@ -23,6 +24,8 @@ export function PageWrapper() {
   }, [isConnected])
 
   return <Stack spacing={'xs'} className={classes.header}>
+    <Text>Keep track of whose turn it is!</Text>
+    <HowToUseModal />
     <Outlet />
     <SocketListener />
   </ Stack>

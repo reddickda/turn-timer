@@ -15,6 +15,7 @@ import { Host } from './routes/Host.tsx';
 import { Join } from './routes/Join.tsx';
 import { Game } from './routes/Game.tsx';
 import { PageWrapper } from './Components/PageWrapper.tsx';
+import { WelcomeOverlay } from './Components/WelcomeOverlay.tsx';
 
 const router = createBrowserRouter([
   {
@@ -49,7 +50,7 @@ const router = createBrowserRouter([
       }
     ]
   },
-  ]);
+]);
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <MantineProvider
@@ -57,6 +58,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       fontFamily: 'Verdana'
     }}
   >
+    <WelcomeOverlay />
     <ContextProvider>
       <Header />
       <RouterProvider router={router} />
