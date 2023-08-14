@@ -1,5 +1,5 @@
 import { socket } from '../../socket';
-import { TextInput } from '@mantine/core';
+import { TextInput, Text } from '@mantine/core';
 import { useRoomContext } from '../Context/RoomContext';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -16,7 +16,6 @@ export function JoinOrHost() {
     setIsInRoom!(true);
     setCurrentRoom!(socket.id.substring(0, 5));
     localStorage.setItem('roomCode', socket.id.substring(0, 5))
-    localStorage.setItem('isHost', 'true');
   }
 
   // join is a join with room number
@@ -28,13 +27,11 @@ export function JoinOrHost() {
           setCurrentRoom!(value);
           console.log('roomcoderesponse', value)
           localStorage.setItem('roomCode', value)
-          localStorage.setItem('isHost', 'false');
           setIsInRoom!(true);
           return;
         } else {
           alert('room does not exist');
           setCurrentRoom!('');
-  
         }
       });
     }else{
@@ -43,10 +40,12 @@ export function JoinOrHost() {
   }
 
   if (!isConnected) {
+    console.log("weeee")
     return;
   }
   return (
     <>
+    <Text>{playerName}</Text>
       <TextInput
         placeholder="Room Code"
         withAsterisk

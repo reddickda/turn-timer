@@ -88,9 +88,6 @@ io.on('connection', (socket) => {
       .emit('connectedUsers', {
         users: usernames
       })
-
-    io.to(roomNumber).emit('endedGame', { room: roomNumber });
-
   })
 
   socket.on('hostLeave', async ({ name, roomNum }, callback) => {
@@ -134,9 +131,9 @@ io.on('connection', (socket) => {
       })
   })
 
-  socket.on('endGame', ({ name, roomNum }, callback) => {
+  socket.on('endGame', ({ host, roomNum }, callback) => {
     console.log('host ended game');
-    io.to(roomNum).emit('endedGame', { room: roomNum });
+    io.to(roomNum).emit('endedGame', { room: roomNum, host: host });
   });
 
   socket.on('nextTurn', ({ name, roomNum }) => {
@@ -172,6 +169,6 @@ io.on('connection', (socket) => {
   });
 });
 
-server.listen(3000, '192.168.0.25', () => {
+server.listen(3000, () => {
   console.log('listening on *:3000');
 });

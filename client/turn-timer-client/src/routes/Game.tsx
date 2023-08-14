@@ -8,7 +8,7 @@ import nextTurnSound from '../assets/mixkit-game-ball-tap-2073.wav'
 import { Link } from "react-router-dom";
 
 export function Game() {
-  const { myTurn, setMyTurn, playersInRoom, playerName, currentRoom, isHost, globalTurnLength } = useRoomContext();
+  const { myTurn, setMyTurn, playersInRoom, playerName, currentRoom, isHost, globalTurnLength, setPlayersInRoom } = useRoomContext();
   const [play] = useSound(nextTurnSound);
   const clockRef = useRef<Countdown>(null);
 
@@ -38,8 +38,16 @@ export function Game() {
   }
 
   function endGame() {
-    socket.emit('endGame', { roomNum: currentRoom })
+    socket.emit('endGame', { roomNum: currentRoom, host: playerName })
   }
+
+  function leave() {
+    console.log('leaving...')
+    socket.emit('leave', { name: playerName, roomNum: currentRoom });
+    setPlayersInRoom!([]);
+    localStorage.setItem('roomCode', '')
+  }
+
   function pause() {
     clockRef?.current?.pause()
     // setPaused(true);
@@ -58,5 +66,6 @@ export function Game() {
         </Stack>}
       </Paper>
       {isHost && <Link to={'/host'} onClick={endGame}>End Game</Link>}
+      {!isHost && <Link to={'/joinorhost'} onClick={leave}>Leave Game</Link>}
     </>
 }

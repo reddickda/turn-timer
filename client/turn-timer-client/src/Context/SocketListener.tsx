@@ -4,7 +4,7 @@ import { socket } from "../../socket";
 import { useRoomContext } from "./RoomContext";
 
 export function SocketListener() {
-  const { isHost, setCurrentRoom, isConnected, setIsConnected, playerName, setPlayersInRoom, setGameStarted, setIsInRoom, setMyTurn, setGlobalTurnLength, setIsHost } = useRoomContext();
+  const { setCurrentRoom, isConnected, setIsConnected, playerName, setPlayersInRoom, setGameStarted, setIsInRoom, setMyTurn, setGlobalTurnLength, setIsHost } = useRoomContext();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -22,7 +22,6 @@ export function SocketListener() {
       setIsInRoom!(false);
       setIsHost!(false);
       setIsConnected!(false);
-      localStorage.setItem('isHost', 'false');
     }
 
     function onConnectedUsers(value: { users: string[] }) {
@@ -51,18 +50,14 @@ export function SocketListener() {
         setMyTurn!(true);
     }
 
-    function onEndedGame() {
-      console.log('ended game :(')
+    function onEndedGame(value: { host: string }) {
+      console.log('ended game :(', playerName)
       setMyTurn!(false);
       setGameStarted!(false);
-      console.log('ishost', localStorage.getItem('isHost'))
-      if(localStorage.getItem('isHost') === 'true')
+      if(value.host === playerName)
       {
-        console.log('waaa')
         navigate('/host', { replace: true})
       }else {
-        console.log('owwww')
-
         navigate('/join', { replace: true})
       }
     }
@@ -75,7 +70,7 @@ export function SocketListener() {
       setCurrentRoom!('')
       setPlayersInRoom!([])
       setIsInRoom!(false);
-      localStorage.setItem('isHost', 'false');
+      navigate('/joinorhost')
     }
 
     socket.on('connect', onConnect);

@@ -1,12 +1,13 @@
 import { socket } from '../../socket';
-import { TextInput } from '@mantine/core';
+import { Button, TextInput } from '@mantine/core';
 import { useRoomContext } from '../Context/RoomContext';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 export function Connect() {
   const { setPlayerName } = useRoomContext();
   const [value, setValue] = useState('');
+  const navigate = useNavigate();
 
   function connect() {
     // if value is null show alert?
@@ -16,6 +17,7 @@ export function Connect() {
       console.log("connected", value)
       socket.auth = { value };
       socket.connect();
+      navigate('/joinorhost')
     } else {
       alert('must set a player name')
     }
@@ -29,7 +31,7 @@ export function Connect() {
         value={value}
         onChange={(event) => setValue(event.currentTarget.value)}
       />
-      <Link onClick={connect} to={value !== '' ? '/joinorhost' : '/'}>Connect</Link>
+      <Button onClick={connect} disabled={value === ''}>Connect</Button>
     </ >
   );
-}
+}// <Link style={{width: '100%'}} onClick={connect} to={'/joinorhost'}>Connect</Link>
