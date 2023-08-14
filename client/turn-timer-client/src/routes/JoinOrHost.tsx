@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export function JoinOrHost() {
-  const { isConnected, playerName, setIsInRoom, setIsHost, setCurrentRoom } = useRoomContext();
+  const { isConnected, playerName, setIsInRoom, setIsHost, setCurrentRoom, setPlayerName, setPlayersInRoom, setGameStarted, currentRoom } = useRoomContext();
   const [value, setValue] = useState('');
   const navigate = useNavigate();
 
@@ -15,8 +15,6 @@ export function JoinOrHost() {
     console.log('hosting')
     setIsHost!(true);
     setIsInRoom!(true);
-    setCurrentRoom!(socket.id.substring(0, 5));
-    localStorage.setItem('roomCode', socket.id.substring(0, 5))
     navigate('/host')
   }
 
@@ -42,6 +40,18 @@ export function JoinOrHost() {
     }
   }
 
+  function disconnect() {
+    setIsInRoom!(false);
+    setPlayerName!('');
+    setIsHost!(false);
+    setPlayersInRoom!([]);
+    setGameStarted!(false);
+    setIsHost!(false);
+    socket.emit('leave', { name: playerName, roomNum: currentRoom ?? socket.id.substring(0, 5) })
+    socket.disconnect();
+    setCurrentRoom!('');
+  }
+
   if (!isConnected) {
     return;
   }
@@ -57,6 +67,7 @@ export function JoinOrHost() {
       <Button onClick={join} disabled={value === ''}>Join</Button>
       <Text>Or</Text>
       <Button onClick={host}>Host a Room</Button>
+      <Button onClick={disconnect}>Disconnect</Button>
     </>
   )
 }

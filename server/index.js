@@ -23,10 +23,12 @@ io.on('connection', (socket) => {
     console.log("not recovered")
   }
 
-  console.log('a user connected', socket.id);
-
   socket.on('host', async () => {
-    const joinCode = socket.id.substring(0, 5);
+    let joinCode = generate().toLocaleUpperCase();
+    while (io.sockets.adapter.rooms.get(joinCode) !== undefined) {
+      joinCode = generate().toLocaleUpperCase();
+    }
+    console.log("joincode", joinCode)
     socket.join(joinCode);
     const sockets = await io.in(joinCode).fetchSockets();
 
@@ -36,12 +38,18 @@ io.on('connection', (socket) => {
 
     io.to(joinCode)
       .emit('connectedUsers', {
-        users: usernames
+        users: usernames,
+      })
+    io.to(joinCode)
+      .emit('hosting', {
+        roomCode: joinCode
       })
   });
 
   socket.on('join', async ({ name, roomNum }, callback) => {
-    const roomNumber = roomNum;
+    const roomNumber = roomNum.toLocaleUpperCase();
+    console.log(roomNumber)
+    console.log(io.sockets.adapter.rooms)
     const exists = io.sockets.adapter.rooms.get(roomNumber)
     if (!exists) {
       callback({
@@ -106,7 +114,7 @@ io.on('connection', (socket) => {
   })
 
   socket.on('startGame', async ({ name, roomNum, players, turnLength }, callback) => {
-    console.log('host started game');
+    console.log('host started game', roomNum);
     const roomNumber = roomNum ?? socket.id.substring(0, 5);
 
     console.log('roomnum', roomNumber)
@@ -172,3 +180,13 @@ io.on('connection', (socket) => {
 server.listen(3000, () => {
   console.log('listening on *:3000');
 });
+
+function generate(len = 5) {
+  let charset = "1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM"
+  let result = ""
+  for (let i = 0; i < len; i++) {
+    let charsetlength = charset.length
+    result += charset.charAt(Math.floor(Math.random() * charsetlength))
+  }
+  return result;
+}

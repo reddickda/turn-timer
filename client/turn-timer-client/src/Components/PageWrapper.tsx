@@ -13,7 +13,7 @@ const useStyles = createStyles(() => ({
 }))
 
 export function PageWrapper() {
-  const { isConnected } = useRoomContext();
+  const { isConnected, isInRoom, gameStarted } = useRoomContext();
   const { classes } = useStyles();
   const navigate = useNavigate()
 
@@ -24,8 +24,7 @@ export function PageWrapper() {
   }, [isConnected])
 
   return <Stack spacing={'xs'} className={classes.header}>
-    <Text>Keep track of whose turn it is!</Text>
-    <HowToUseModal />
+    {!isInRoom && !gameStarted && <> <Text>Keep track of whose turn it is!</Text> <HowToUseModal /></>}
     <Outlet />
     <SocketListener />
   </ Stack>

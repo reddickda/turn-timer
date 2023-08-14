@@ -1,17 +1,19 @@
-import { NumberInput, Text } from "@mantine/core";
+import { Button, NumberInput, Text } from "@mantine/core";
 import { OrderableList } from "../Components/OrderableList";
 import { useState } from "react";
 import { useRoomContext } from "../Context/RoomContext";
 import { socket } from "../../socket";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export function Host() {
   const { isConnected, currentRoom, playersInRoom, isHost, playerName, setIsHost, setPlayersInRoom } = useRoomContext();
   const [turnLength, setTurnLength] = useState<number | ''>(10);
+  const navigate = useNavigate();
   
   function start() {
     console.log("start", playersInRoom)
     socket.emit('startGame', { roomNum: currentRoom, players: playersInRoom, turnLength: turnLength });
+    navigate('/game');
   }
 
   function leave() {
@@ -21,6 +23,7 @@ export function Host() {
     setIsHost!(false);
     setPlayersInRoom!([]);
     localStorage.setItem('roomCode', '')
+    navigate('/joinorhost');
   }
 
   if (!isConnected) {
@@ -30,8 +33,9 @@ export function Host() {
   return <>
     <Text>In room: {currentRoom}</Text>
     <OrderableList data={playersInRoom} />
+    <Text align="start" size={'xs'}>Turn length(s)</Text>
     <NumberInput value={turnLength} onChange={setTurnLength} />
-    <Link onClick={start} to={'/game'}>Start Game</Link>
-    <Link onClick={leave} to={'/joinorhost'}>Leave Room</Link>
+    <Button onClick={start}>Start Game</Button>
+    <Button onClick={leave}>Leave Room</Button>
   </>
 }
