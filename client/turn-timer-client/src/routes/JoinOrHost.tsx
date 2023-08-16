@@ -15,7 +15,6 @@ export function JoinOrHost() {
     console.log('hosting')
     setIsHost!(true);
     setIsInRoom!(true);
-    navigate('/host')
   }
 
   // join is a join with room number

@@ -1,19 +1,17 @@
 import { Button, Paper, Stack, Grid, Text } from "@mantine/core"
 import { useRoomContext } from "../Context/RoomContext"
-import { useEffect, useRef } from "react";
+import { useLayoutEffect, useRef } from "react";
 import Countdown from 'react-countdown';
 import useSound from 'use-sound';
 import { socket } from "../../socket";
 import nextTurnSound from '../assets/mixkit-game-ball-tap-2073.wav'
-import { useNavigate } from "react-router-dom";
 
 export function Game() {
   const { myTurn, setMyTurn, playersInRoom, playerName, currentRoom, isHost, globalTurnLength, setPlayersInRoom } = useRoomContext();
   const [play] = useSound(nextTurnSound);
   const clockRef = useRef<Countdown>(null);
-  const navigate = useNavigate();
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (myTurn) {
       play()
     }
@@ -40,7 +38,6 @@ export function Game() {
 
   function endGame() {
     socket.emit('endGame', { roomNum: currentRoom, host: playerName })
-    navigate('/host')
   }
 
   function leave() {
@@ -49,7 +46,6 @@ export function Game() {
 
     setPlayersInRoom!([]);
     localStorage.setItem('roomCode', '')
-    navigate('/joinorhost')
   }
 
   function pause() {

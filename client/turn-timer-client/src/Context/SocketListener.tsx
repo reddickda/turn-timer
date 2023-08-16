@@ -11,6 +11,7 @@ export function SocketListener() {
     function onConnect() {
 
       setIsConnected!(true);
+      navigate('/joinorhost')
     }
 
     function onDisconnect() {
@@ -75,6 +76,7 @@ export function SocketListener() {
       console.log('here')
       localStorage.setItem('roomCode', value.roomCode)
       setCurrentRoom!(value.roomCode);
+      navigate('/host')
     }
 
     socket.on('connect', onConnect);
