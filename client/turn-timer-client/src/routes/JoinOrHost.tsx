@@ -1,13 +1,17 @@
 import { socket } from '../../socket';
 import { TextInput, Text, Button } from '@mantine/core';
 import { useRoomContext } from '../Context/RoomContext';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export function JoinOrHost() {
   const { isConnected, playerName, setIsInRoom, setIsHost, setCurrentRoom, setPlayerName, setPlayersInRoom, setGameStarted, currentRoom } = useRoomContext();
   const [value, setValue] = useState('');
   const navigate = useNavigate();
+  
+  useEffect(() => {
+    socket.emit('leave', { name: playerName, roomNum: currentRoom ?? socket.id.substring(0, 5) })
+  }, [])
 
   // host is a join with no room number
   function host() {

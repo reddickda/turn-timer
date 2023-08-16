@@ -1,11 +1,15 @@
 import { socket } from '../../socket';
 import { Button, TextInput } from '@mantine/core';
 import { useRoomContext } from '../Context/RoomContext';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export function Connect() {
   const { setPlayerName } = useRoomContext();
   const [value, setValue] = useState('');
+
+  useEffect(() => {
+    socket.disconnect();
+  }, [])
 
   function connect() {
     // if value is null show alert?
@@ -31,4 +35,4 @@ export function Connect() {
       <Button onClick={connect} disabled={value === ''}>Connect</Button>
     </ >
   );
-}// <Link style={{width: '100%'}} onClick={connect} to={'/joinorhost'}>Connect</Link>
+}

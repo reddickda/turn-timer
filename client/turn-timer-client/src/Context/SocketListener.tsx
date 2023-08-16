@@ -33,7 +33,6 @@ export function SocketListener() {
         socket.emit('endGame', { roomNum: currentRoom, host: playerName })
         navigate('/host')
       } else {
-        socket.emit('endGame', { roomNum: currentRoom })
         navigate('/joinorhost')
       }
 
@@ -57,7 +56,7 @@ export function SocketListener() {
     function onEndedGame(value: { host: string }) {
       setMyTurn!(false);
       setGameStarted!(false);
-      if (value.host === playerName) {
+      if (value.host === playerName || isHost) {
         navigate('/host', { replace: true })
       } else {
         navigate('/join', { replace: true })
