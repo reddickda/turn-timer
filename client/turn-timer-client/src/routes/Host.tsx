@@ -9,7 +9,7 @@ export function Host() {
   const { isConnected, currentRoom, playersInRoom, isHost, playerName, setIsHost, setPlayersInRoom } = useRoomContext();
   const [turnLength, setTurnLength] = useState<number | ''>(10);
   const navigate = useNavigate();
-  
+
   function start() {
     console.log("start", playersInRoom)
     socket.emit('startGame', { roomNum: currentRoom, players: playersInRoom, turnLength: turnLength });

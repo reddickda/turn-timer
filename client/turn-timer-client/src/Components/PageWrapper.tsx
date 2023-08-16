@@ -1,6 +1,6 @@
 import { Stack, createStyles, Text } from '@mantine/core'
 import { SocketListener } from '../Context/SocketListener.tsx';
-import '../App.css'
+import '../PageWrapper.css'
 import { Outlet, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useRoomContext } from '../Context/RoomContext.tsx';
