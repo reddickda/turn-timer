@@ -31,8 +31,10 @@ export function SocketListener() {
     function onLeftGame() {
       if (isHost) {
         socket.emit('endGame', { roomNum: currentRoom, host: playerName })
+        navigate('/host')
       } else {
         socket.emit('endGame', { roomNum: currentRoom })
+        navigate('/joinorhost')
       }
 
       setMyTurn!(false);
