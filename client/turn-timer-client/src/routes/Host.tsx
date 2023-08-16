@@ -13,7 +13,6 @@ export function Host() {
   function start() {
     console.log("start", playersInRoom)
     socket.emit('startGame', { roomNum: currentRoom, players: playersInRoom, turnLength: turnLength });
-    navigate('/game');
   }
 
   function leave() {
