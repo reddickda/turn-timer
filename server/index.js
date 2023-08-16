@@ -8,7 +8,8 @@ const io = new Server(server, {
     maxDisconnectionDuration: 2 * 60 * 1000,
   },
   cors: {
-    origin: ["http://localhost:5173", "http://192.168.0.25:5173", "https://main.d2cp9f7wdzoqk6.amplifyapp.com"]
+    // origin: ["http://localhost:5173", "http://192.168.0.25:5173", "https://main.d2cp9f7wdzoqk6.amplifyapp.com"]
+    origin: ["https://whosemove.com", "https://www.whosemove.com"]
   }
 });
 
