@@ -10,6 +10,7 @@ interface IRoomContext {
   gameStarted: boolean,
   myTurn: boolean,
   globalTurnLength: number,
+  currentPlayersTurn: string,
   setGlobalTurnLength?: Dispatch<SetStateAction<number>>, 
   setMyTurn?: Dispatch<SetStateAction<boolean>>, 
   setGameStarted?: Dispatch<SetStateAction<boolean>>,
@@ -19,6 +20,7 @@ interface IRoomContext {
   setCurrentRoom?: Dispatch<SetStateAction<string>>,
   setPlayersInRoom?: Dispatch<SetStateAction<string[]>>,
   setIsHost?: Dispatch<SetStateAction<boolean>>,
+  setCurrentPlayersTurn?: Dispatch<SetStateAction<string>>,
 }
 
 const RoomContext = createContext<IRoomContext>({
@@ -30,6 +32,7 @@ const RoomContext = createContext<IRoomContext>({
   isHost: false,
   gameStarted: false,
   myTurn: false,
+  currentPlayersTurn: '',
   globalTurnLength: 10,
   setGlobalTurnLength: undefined,
   setMyTurn: undefined,
@@ -40,6 +43,7 @@ const RoomContext = createContext<IRoomContext>({
   setCurrentRoom: undefined,
   setPlayersInRoom: undefined,
   setIsHost: undefined,
+  setCurrentPlayersTurn: undefined,
 });
 
 interface IContextProvider {
@@ -56,6 +60,7 @@ export const ContextProvider = ({ children }: IContextProvider) => {
   const [gameStarted, setGameStarted] = useState<boolean>(false);
   const [myTurn, setMyTurn] = useState<boolean>(false);
   const [globalTurnLength, setGlobalTurnLength] = useState<number>(10)
+  const [currentPlayersTurn, setCurrentPlayersTurn] = useState<string>('')
 
   if (!RoomContext) {
     throw new Error(
@@ -83,6 +88,8 @@ export const ContextProvider = ({ children }: IContextProvider) => {
       setMyTurn,
       globalTurnLength,
       setGlobalTurnLength,
+      currentPlayersTurn,
+      setCurrentPlayersTurn
     }}>
       {children}
     </RoomContext.Provider>

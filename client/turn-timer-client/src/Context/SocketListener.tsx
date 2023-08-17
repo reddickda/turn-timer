@@ -4,7 +4,7 @@ import { socket } from "../../socket";
 import { useRoomContext } from "./RoomContext";
 
 export function SocketListener() {
-  const { setCurrentRoom, isConnected, setIsConnected, playerName, setPlayersInRoom, setGameStarted, setIsInRoom, setMyTurn, setGlobalTurnLength, setIsHost, currentRoom, isHost } = useRoomContext();
+  const { setCurrentRoom, isConnected, setIsConnected, playerName, setPlayersInRoom, setGameStarted, setIsInRoom, setMyTurn, setGlobalTurnLength, setIsHost, currentRoom, isHost, setCurrentPlayersTurn } = useRoomContext();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -28,12 +28,15 @@ export function SocketListener() {
       setPlayersInRoom!(value.users);
     }
 
-    function onLeftGame() {
+    function onLeftGame(value: { name: string}) {
       if (isHost) {
+        console.log("smoo")
         socket.emit('endGame', { roomNum: currentRoom, host: playerName })
         navigate('/host')
-      } else {
+      } else if(value.name === playerName){
         navigate('/joinorhost')
+      }else {
+        navigate('/join')
       }
 
       setMyTurn!(false);
@@ -51,6 +54,7 @@ export function SocketListener() {
       console.log(value.name, playerName)
       if (value.name === playerName)
         setMyTurn!(true);
+      setCurrentPlayersTurn!(value.name)
     }
 
     function onEndedGame(value: { host: string }) {

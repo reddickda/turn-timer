@@ -7,7 +7,8 @@ import { socket } from "../../socket";
 import nextTurnSound from '../assets/mixkit-game-ball-tap-2073.wav'
 
 export function Game() {
-  const { myTurn, setMyTurn, playersInRoom, playerName, currentRoom, isHost, globalTurnLength, setPlayersInRoom } = useRoomContext();
+  const { myTurn, setMyTurn, playersInRoom, playerName, currentRoom, isHost, globalTurnLength, setPlayersInRoom, currentPlayersTurn } = useRoomContext();
+  
   const [play] = useSound(nextTurnSound);
   const clockRef = useRef<Countdown>(null);
 
@@ -59,6 +60,7 @@ export function Game() {
 
   return <>
   <Text>{playerName}</Text>
+  {!myTurn && <Text>{currentPlayersTurn}'s turn</Text>}
     <Paper style={{ backgroundColor: myTurn ? 'green' : 'red', height: '50vh', width: 300 }}>
       {myTurn && <Stack style={{height: '100%'}}><div style={{backgroundColor:'#228be6', borderRadius: 5, margin: 5}}>Your Turn!<Countdown ref={clockRef} date={Date.now() + (globalTurnLength * 1000)} renderer={renderer} /></div>
         {<>
